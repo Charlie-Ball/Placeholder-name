@@ -13,6 +13,10 @@ class character():
 windowLength = 1500
 windowHeight = 800
 
+playerWidth = 25
+playerHeight = 25
+player = character((windowLength / 2) - playerWidth, (windowHeight / 2) - playerHeight, playerWidth, playerHeight, 2)
+
 window = pygame.display.set_mode((windowLength, windowHeight))
 clock = pygame.time.Clock()
 
@@ -23,16 +27,28 @@ pygame.display.set_caption("Plankton Bloom")
 def draw(p, list, num):
     window.fill((0,0,0))
     pygame.draw.rect(window, (255, 255, 255), (p.x, p.y, p.width, p.len))
-    returnVals = makePlankton(list, num)
+    returnVals = makePlankton(list, num, p)
 
     pygame.display.update()
     return returnVals
 
-def makePlankton(list, num):
+def makePlankton(list, num, player):
     if num <= 100:
         list[0].append(random.randrange(windowLength))
         list[1].append(random.randrange(windowHeight))
         num += 1
+
+    return planktonColision(list, num, player)
+
+def planktonColision(list, num, player):
+    for i in range(0, len(list[0]) - 1):
+        if list[0][i] >= player.x and list[0][i] <= player.x + player.width:
+            if list[1][i] >= player.y and list[1][i] <= player.y + player.len:
+                del list[0][i], list[1][i]
+
+    return drawPlankton(list, num)
+
+def drawPlankton(list, num):
     for i in range(0, len(list[0])):
         pygame.draw.rect(window, (255,255,255), (list[0][i], list[1][i], 5, 5))
 
@@ -54,11 +70,6 @@ def quit():
         if event.type == pygame.QUIT:
             pygame.quit()
 
-
-playerWidth = 25
-playerHeight = 25
-player = character((windowLength / 2) - playerWidth, (windowHeight / 2) - playerHeight, playerWidth, playerHeight, 2)
-
 def main():
     planktonList = [[], []]
     activePlanktonNum = 0
@@ -72,4 +83,3 @@ def main():
         movement(player)
 
 main()
-
