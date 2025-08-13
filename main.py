@@ -45,11 +45,11 @@ def movement(player):
     keys = pygame.key.get_pressed()
     if (keys[pygame.K_w] or keys[pygame.K_UP]) and player.y - player.vel >= 0:
         player.y -= player.vel
-    if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and player.y + player.vel <= windowLength:
+    if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and player.y + player.len + player.vel <= windowHeight:
         player.y += player.vel
     if (keys[pygame.K_a] or keys[pygame.K_LEFT]) and player.x - player.vel >= 0:
         player.x -= player.vel
-    if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and player.x + player.vel <= windowHeight:
+    if (keys[pygame.K_d] or keys[pygame.K_RIGHT]) and player.x + player.width + player.vel <= windowLength:
         player.x += player.vel
 
 def quit():
