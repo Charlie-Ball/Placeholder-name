@@ -20,26 +20,23 @@ pygame.display.set_caption("Plankton Bloom")
 #icon = pygame.image.load("")
 #pygame.display.set_icon(icon)
 
-planktonList = [[], []]
-activePlanktonNum = 0
-def draw(p, num):
+def draw(p, list, num):
     window.fill((0,0,0))
     pygame.draw.rect(window, (255, 255, 255), (p.x, p.y, p.width, p.len))
-
-    num = makePlankton(num)
+    returnVals = makePlankton(list, num)
 
     pygame.display.update()
+    return returnVals
 
-def makePlankton(num):
-    if num < 50:
-        planktonList[0].append(random.randrange(windowLength))
-        planktonList[1].append(random.randrange(windowHeight))
+def makePlankton(list, num):
+    if num <= 100:
+        list[0].append(random.randrange(windowLength))
+        list[1].append(random.randrange(windowHeight))
         num += 1
+    for i in range(0, len(list[0])):
+        pygame.draw.rect(window, (255,255,255), (list[0][i], list[1][i], 5, 5))
 
-    for i in range(0, len(planktonList[0])):
-        pygame.draw.rect(window, (255,255,255), (planktonList[0][i], planktonList[1][i], 5, 5))
-
-    return num
+    return [list, num]
 
 def movement(player):
     keys = pygame.key.get_pressed()
@@ -57,15 +54,22 @@ def quit():
         if event.type == pygame.QUIT:
             pygame.quit()
 
+
+playerWidth = 25
+playerHeight = 25
+player = character((windowLength / 2) - playerWidth, (windowHeight / 2) - playerHeight, playerWidth, playerHeight, 2)
+
 def main():
-    playerWidth = 25
-    playerHeight = 25
-    player = character((windowLength / 2) - playerWidth, (windowHeight / 2) - playerHeight, playerWidth, playerHeight, 2)
+    planktonList = [[], []]
+    activePlanktonNum = 0
 
     while True:
         clock.tick(60)
         quit()
-        draw(player, activePlanktonNum)
+        returnVals = draw(player, planktonList, activePlanktonNum)
+        planktonList = returnVals[0]
+        activePlanktonNum = returnVals[1]
         movement(player)
 
 main()
+
